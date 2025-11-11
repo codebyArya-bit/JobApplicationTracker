@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Job Application Tracker</title>
+  <link rel="stylesheet" th:href="@{/app.css}"/>
+</head>
+<body>
+<header class="header">
+  <h1>Job Application Tracker</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/export">Export CSV</a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="panel">
+    <form class="row" method="get" action="/">
+      <input type="text" name="q" th:value="${q}" placeholder="Search text/company/role"/>
+      <select name="status">
+        <option th:value="" th:selected="${status} == null">All Statuses</option>
+        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${status} == s"></option>
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Add Application</h2>
+    <form method="post" action="/create" class="grid">
+      <input type="text" name="company" placeholder="Company" th:value="${form.company}" required/>
+      <input type="text" name="role" placeholder="Role" th:value="${form.role}" required/>
+      <select name="status" th:value="${form.status}">
+        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+      </select>
+      <input type="date" name="appliedOn" th:value="${form.appliedOn}" required/>
+      <input type="text" name="notes" placeholder="Notes" th:value="${form.notes}"/>
+      <button type="submit">Add</button>
+    </form>
+    <form method="post" action="/import" enctype="multipart/form-data" class="row">
+      <input type="file" name="file" accept=".csv"/>
+      <button type="submit">Import CSV</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Applications</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th><th>Company</th><th>Role</th><th>Status</th><th>Applied</th><th>Last Update</th><th>Follow-Up</th><th>Notes</th><th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="r : ${records}">
+        <td th:text="${r.id}"></td>
+        <td th:text="${r.company}"></td>
+        <td th:text="${r.role}"></td>
+        <td th:text="${r.status}"></td>
+        <td th:text="${r.appliedOn}"></td>
+        <td th:text="${r.lastUpdate}"></td>
+        <td><span th:text="${r.followUpDue()} ? 'Due' : '-'" th:classappend="${r.followUpDue()} ? 'badge badge-warn' : 'badge'"></span></td>
+        <td th:text="${r.notes}"></td>
+        <td>
+          <form th:action="@{/delete/{id}(id=${r.id})}" method="post" style="display:inline">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<footer class="footer">
+  <small>In-memory store • Resets on restart</small>
+</footer>
+
+</body>
+</html>

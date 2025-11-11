@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Job Tracker UI</title>
+  <link rel="stylesheet" href="/app.css" />
+  <style>
+    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    .row { display: flex; gap: 12px; align-items: center; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid #2a3138; }
+    .actions { display: flex; gap: 8px; }
+    .error { color: #ff6b6b; }
+    .success { color: #2ecc71; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Job Application Tracker</h1>
+    <nav>
+      <a href="/ui/index.html">UI</a>
+      <a href="/api/apps/export">Export CSV</a>
+    </nav>
+  </header>
+
+  <main class="container grid">
+    <section class="panel">
+      <h2>Filter</h2>
+      <form id="filterForm" class="row">
+        <input type="text" id="q" placeholder="Search text/company/role" />
+        <select id="status">
+          <option value="">All Statuses</option>
+          <option>APPLIED</option>
+          <option>HR_SCREEN</option>
+          <option>INTERVIEW_1</option>
+          <option>INTERVIEW_2</option>
+          <option>OFFER</option>
+          <option>REJECTED</option>
+        </select>
+        <button type="submit">Apply</button>
+        <button type="button" id="clearBtn">Clear</button>
+      </form>
+      <p id="feedback" class="error" style="display:none"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Add Application</h2>
+      <form id="createForm" class="grid">
+        <div class="row">
+          <input type="text" id="c_company" placeholder="Company" required />
+          <input type="text" id="c_role" placeholder="Role" required />
+          <select id="c_status" required>
+            <option>APPLIED</option>
+            <option>HR_SCREEN</option>
+            <option>INTERVIEW_1</option>
+            <option>INTERVIEW_2</option>
+            <option>OFFER</option>
+            <option>REJECTED</option>
+          </select>
+        </div>
+        <div class="row">
+          <input type="date" id="c_appliedOn" required />
+          <input type="text" id="c_notes" placeholder="Notes" />
+        </div>
+        <div class="row">
+          <button type="submit">Create</button>
+          <button type="reset">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Applications</h2>
+      <table id="appsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Company</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Applied On</th>
+            <th>Last Update</th>
+            <th>Notes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>In-memory store • Resets on restart</small>
+  </footer>
+
+  <script src="/ui/app.js"></script>
+</body>
+</html>

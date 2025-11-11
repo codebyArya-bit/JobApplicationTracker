@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Job Application Tracker (Probe)</title>
+  <link rel="stylesheet" href="/app.css"/>
+</head>
+<body>
+<header class="header">
+  <h1>Job Application Tracker</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/export">Export CSV</a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="panel">
+    <form class="row" method="get" action="/">
+      <input type="text" name="q" th:value="${q}" placeholder="Search text/company/role"/>
+      <select name="status">
+        <option th:value="" th:selected="${status} == null">All Statuses</option>
+        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${status} == s"></option>
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <p>Probe view loaded. If this works, the issue lies in the form or table sections.</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <small>In-memory store • Resets on restart</small>
+  </footer>
+
+</body>
+</html>

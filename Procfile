@@ -1,0 +1,1 @@
+web: java -Dserver.port=$PORT -jar target/job-tracker-0.0.1.jar

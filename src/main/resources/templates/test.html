@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Test View</title>
+  <link rel="stylesheet" href="/app.css"/>
+  <style> .box { padding: 24px; margin: 24px; background:#1b2127; color:#e6edf3; border:1px solid #2a3138; } </style>
+</head>
+<body>
+<div class="box">
+  <h1>Test View Rendered</h1>
+  <p>If you can see this, Thymeleaf view resolution works.</p>
+  <form method="get" action="/">
+    <select name="status">
+      <option value="" th:selected="${status} == null">All Statuses</option>
+      <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${status} == s"></option>
+    </select>
+    <button type="submit">Go Home</button>
+  </form>
+</div>
+</body>
+</html>
