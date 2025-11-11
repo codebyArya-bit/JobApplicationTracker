@@ -143,10 +143,18 @@ docker push <your-dockerhub-username>/job-tracker:latest
 Then create a service on your provider using the image. Ensure the service exposes container port `8082` (the app binds to `8082` by default). After deployment, open `/ui/index.html`.
 
 ### Render (Docker)
-- Create a new Web Service
-- Select “Deploy an existing image” or connect repo and let Render build using `Dockerfile`
-- Service port: 8082
+Recommended: use Docker runtime to avoid Maven/JDK setup issues.
+
+With render.yaml:
+- Keep `render.yaml` at repo root (already included).
+- Render will create a Web Service using Docker and set health check to `/actuator/health`.
+- Auto deploy on new commits is enabled.
+
+Manual setup (no render.yaml):
+- Create a new Web Service, Environment: Docker
+- Dockerfile Path: `Dockerfile`
 - Health check path: `/actuator/health`
+- No port configuration needed; app binds to `PORT` (via `server.port=${PORT:8082}`).
 
 ### Railway (Dockerfile)
 - Create a new service from your GitHub repo
