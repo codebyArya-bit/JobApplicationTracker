@@ -1,5 +1,10 @@
 # Job Application Tracker
 
+## Live Deployment
+- Public URL: https://jobapplicationtracker-fvh8.onrender.com
+- UI: https://jobapplicationtracker-fvh8.onrender.com/ui/index.html
+- Health: https://jobapplicationtracker-fvh8.onrender.com/actuator/health
+
 A production‑ready Java 21 Spring Boot web app with a clean HTML UI (Thymeleaf) and JSON API. Stores data in memory (resets on restart) and supports CSV export/import. Ready to run locally or via Docker to Render/Railway/Fly.io/Cloud Run/Heroku.
 
 ## Features
