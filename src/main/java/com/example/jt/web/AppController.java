@@ -31,19 +31,9 @@ public class AppController {
                         LocalDate lastUpdate) {}
 
   @GetMapping("/")
-  public @ResponseBody String index(@RequestParam(name = "q", required = false) String q,
-                      @RequestParam(name = "status", required = false) String statusStr,
-                      Model model) {
-    Status status = null;
-    if (statusStr != null && !statusStr.isBlank()) {
-      try { status = Status.valueOf(statusStr); } catch (IllegalArgumentException ignored) {}
-    }
-    model.addAttribute("records", service.list(q, status));
-    model.addAttribute("q", q == null ? "" : q);
-    model.addAttribute("status", status);
-    model.addAttribute("statuses", Status.values());
-    model.addAttribute("form", new AppForm("", "", Status.APPLIED, LocalDate.now(), "", LocalDate.now()));
-    return "OK";
+  public String index() {
+    // Forward root to SPA UI served from static resources
+    return "forward:/ui/index.html";
   }
 
   @GetMapping("/test")
