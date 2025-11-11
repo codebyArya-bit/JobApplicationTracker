@@ -25,6 +25,19 @@ mvn spring-boot:run
 # App runs on http://localhost:8082/
 ```
 
+UI (SPA):
+
+- Open `http://localhost:8082/ui/index.html` for the single-page UI.
+- JSON API base: `http://localhost:8082/api/apps`.
+
+Alternatively, build the JAR and run it:
+
+```bash
+mvn -DskipTests package
+java -jar target/job-tracker-0.0.1.jar
+# App runs on http://localhost:8082/
+```
+
 Or Docker:
 
 ```bash
@@ -53,9 +66,14 @@ job-tracker/
       ├─ application.properties
       ├─ templates/
       │  ├─ layout.html
-      │  ├─ index.html
+      │  ├─ home.html
+      │  ├─ test.html
+      │  └─ home_probe.html
       └─ static/
-         └─ app.css
+         ├─ app.css
+         └─ ui/
+            ├─ index.html
+            └─ app.js
 ```
 
 ## Configuration
@@ -84,8 +102,9 @@ Base: `http://localhost:8082/api/apps`
 - Import CSV: `POST /api/apps/import` (multipart field `file`)
 
 ## UI
-- Home page: filter/search, add new application, table with follow‑up badge, delete action
-- Export CSV link on header; import CSV via form
+- SPA UI: `http://localhost:8082/ui/index.html` (filter/search, add, delete)
+- Export CSV link: `http://localhost:8082/api/apps/export`
+- Import CSV: POST `http://localhost:8082/api/apps/import` (multipart field `file`)
 
 ## CSV Format
 Header: `id,company,role,status,appliedOn,notes,lastUpdate`
@@ -95,6 +114,39 @@ Header: `id,company,role,status,appliedOn,notes,lastUpdate`
 ## Heroku
 - Uses `Procfile`: `web: java -Dserver.port=$PORT -jar target/job-tracker-0.0.1.jar`
 - Add Java buildpack; deploy then run `mvn -DskipTests package` during build
+
+Steps:
+
+1) Create a Heroku app and enable the Java buildpack.
+2) Push the repo to Heroku or connect GitHub.
+3) Set up a build step that runs `mvn -DskipTests package`.
+4) Heroku will run the `web` process from `Procfile` binding to `$PORT`.
+5) Visit the app, then open `/ui/index.html`.
+
+Note: In Heroku, do not hardcode the port; rely on `$PORT` in `Procfile`.
+
+## Deploy with Docker (Any cloud)
+
+Deploy the Docker image to providers that support containers (Render, Railway, Fly.io, Cloud Run):
+
+```bash
+# Build and publish your image (example using Docker Hub)
+docker build -t <your-dockerhub-username>/job-tracker:latest .
+docker push <your-dockerhub-username>/job-tracker:latest
+```
+
+Then create a service on your provider using the image. Ensure the service exposes container port `8082` (the app binds to `8082` by default). After deployment, open `/ui/index.html`.
+
+### Render (Docker)
+- Create a new Web Service
+- Select “Deploy an existing image” or connect repo and let Render build using `Dockerfile`
+- Service port: 8082
+- Health check path: `/actuator/health`
+
+### Railway (Dockerfile)
+- Create a new service from your GitHub repo
+- Railway will detect the `Dockerfile` and build the image
+- Set service port to `8082`
 
 ## Health
 - `GET /actuator/health`
